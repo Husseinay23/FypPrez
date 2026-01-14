@@ -1,8 +1,14 @@
-import PptxGenJS, { SHAPE_NAME } from "pptxgenjs";
+import PptxGenJS from "pptxgenjs";
 import { Slide } from "@/types/slide";
 import { FlowchartData } from "@/types/flowchart";
-import { computeDagreLayout, getLayoutDimensions } from "@/lib/flowchart-layout";
+import {
+  computeDagreLayout,
+  getLayoutDimensions,
+} from "@/lib/flowchart-layout";
 import { getSlideSection, SECTION_COLORS } from "@/lib/section-utils";
+
+// Shape names used in this project (valid PptxGenJS shape types)
+type SHAPE_NAME = "rect" | "roundRect" | "diamond" | "line";
 
 // PPTX slide dimensions (16:9 aspect ratio)
 const SLIDE_WIDTH = 10; // inches
@@ -71,7 +77,7 @@ function getNodeColor(nodeType: string): string {
 async function imageToBase64(imagePath: string): Promise<string | null> {
   try {
     // For Next.js public folder, images are served from root
-    const fullPath = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
+    const fullPath = imagePath.startsWith("/") ? imagePath : `/${imagePath}`;
     const response = await fetch(fullPath);
     if (!response.ok) {
       console.warn(`Failed to load image: ${fullPath}`);
@@ -83,8 +89,8 @@ async function imageToBase64(imagePath: string): Promise<string | null> {
       reader.onloadend = () => {
         const base64String = reader.result as string;
         // Remove data URL prefix if present
-        const base64 = base64String.includes(',') 
-          ? base64String.split(',')[1] 
+        const base64 = base64String.includes(",")
+          ? base64String.split(",")[1]
           : base64String;
         resolve(base64);
       };
@@ -127,11 +133,11 @@ export async function exportToPPTX(
 
     // Convert gradient to solid color for PPTX (use accent color with transparency)
     // Extract RGB from hex color
-    const accentHex = sectionColor.accent.replace('#', '');
+    const accentHex = sectionColor.accent.replace("#", "");
     const r = parseInt(accentHex.substring(0, 2), 16);
     const g = parseInt(accentHex.substring(2, 4), 16);
     const b = parseInt(accentHex.substring(4, 6), 16);
-    
+
     // Create a dark background with section accent tint
     const bgColor = `0a0a0a`; // Keep dark base
     pptxSlide.background = { color: bgColor };
@@ -160,7 +166,7 @@ export async function exportToPPTX(
             h: 1.0,
           });
         }
-        
+
         // University info
         pptxSlide.addText("Phoenicia University", {
           x: logoBase64 ? 1.6 : 0.5,
@@ -173,16 +179,19 @@ export async function exportToPPTX(
           align: logoBase64 ? "left" : "center",
           bold: true,
         });
-        pptxSlide.addText("College of Arts and Sciences\nDepartment of Computer Science", {
-          x: 0.5,
-          y: 1.1,
-          w: 9,
-          h: 0.4,
-          fontSize: 16,
-          fontFace: "Arial",
-          color: "f5f5f5",
-          align: "center",
-        });
+        pptxSlide.addText(
+          "College of Arts and Sciences\nDepartment of Computer Science",
+          {
+            x: 0.5,
+            y: 1.1,
+            w: 9,
+            h: 0.4,
+            fontSize: 16,
+            fontFace: "Arial",
+            color: "f5f5f5",
+            align: "center",
+          }
+        );
 
         // Main title
         if (slide.title) {
@@ -198,16 +207,19 @@ export async function exportToPPTX(
             bold: true,
           });
         }
-        pptxSlide.addText("Using Deep Learning for Dialect-Aware Speech Technologies\n(Arabic Dialect Identification using the ADC Corpus)", {
-          x: 0.5,
-          y: 2.4,
-          w: 9,
-          h: 0.5,
-          fontSize: 18,
-          fontFace: "Arial",
-          color: "f5f5f5",
-          align: "center",
-        });
+        pptxSlide.addText(
+          "Using Deep Learning for Dialect-Aware Speech Technologies\n(Arabic Dialect Identification using the ADC Corpus)",
+          {
+            x: 0.5,
+            y: 2.4,
+            w: 9,
+            h: 0.5,
+            fontSize: 18,
+            fontFace: "Arial",
+            color: "f5f5f5",
+            align: "center",
+          }
+        );
 
         // Subtitle
         pptxSlide.addText("Final Year Project – Final Report", {
@@ -222,16 +234,19 @@ export async function exportToPPTX(
         });
 
         // Supervisors and Student
-        pptxSlide.addText("Supervisors:\nDr. Mageda Sharfeddine & Dr. Abbas Rammal", {
-          x: 0.5,
-          y: 3.8,
-          w: 9,
-          h: 0.4,
-          fontSize: 16,
-          fontFace: "Arial",
-          color: "f5f5f5",
-          align: "center",
-        });
+        pptxSlide.addText(
+          "Supervisors:\nDr. Mageda Sharfeddine & Dr. Abbas Rammal",
+          {
+            x: 0.5,
+            y: 3.8,
+            w: 9,
+            h: 0.4,
+            fontSize: 16,
+            fontFace: "Arial",
+            color: "f5f5f5",
+            align: "center",
+          }
+        );
         pptxSlide.addText("Student:\nHussein Ayoub – 202102181", {
           x: 0.5,
           y: 4.5,
@@ -395,9 +410,12 @@ export async function exportToPPTX(
       case "flowchart":
         if (slide.flowchart && flowcharts.has(slide.flowchart)) {
           const flowchart = flowcharts.get(slide.flowchart)!;
-          
+
           // Compute layout using row-based grid (deterministic)
-          const positionedNodes = computeDagreLayout(flowchart.nodes, flowchart.edges);
+          const positionedNodes = computeDagreLayout(
+            flowchart.nodes,
+            flowchart.edges
+          );
           const layoutDimensions = getLayoutDimensions(positionedNodes);
 
           // Render nodes as shapes
@@ -487,7 +505,7 @@ export async function exportToPPTX(
       case "model-results":
         // Model results slide with metrics and images
         let metricsY = slide.title ? 1.8 : 0.5;
-        
+
         // Add metrics
         if (slide.metrics) {
           const metricsText = Object.entries(slide.metrics)
@@ -517,7 +535,7 @@ export async function exportToPPTX(
             const image = slide.images[idx];
             const imageX = startX + idx * (imageWidth + 0.2);
             const imageBase64 = await imageToBase64(image.src);
-            
+
             if (imageBase64) {
               pptxSlide.addImage({
                 data: imageBase64,
@@ -526,7 +544,7 @@ export async function exportToPPTX(
                 w: imageWidth,
                 h: imageHeight,
               });
-              
+
               // Add caption below image
               if (image.caption) {
                 pptxSlide.addText(image.caption, {
@@ -542,7 +560,7 @@ export async function exportToPPTX(
               }
             } else {
               // Fallback placeholder
-              pptxSlide.addText(`[${image.caption || 'Image'}]`, {
+              pptxSlide.addText(`[${image.caption || "Image"}]`, {
                 x: imageX,
                 y: imageY,
                 w: imageWidth,
