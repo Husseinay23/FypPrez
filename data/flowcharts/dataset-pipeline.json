@@ -1,0 +1,33 @@
+{
+  "nodes": [
+    { "id": "src1", "label": "YouTube Interviews", "type": "input", "row": 0 },
+    { "id": "src2", "label": "Public Podcasts", "type": "input", "row": 0 },
+    { "id": "dl", "label": "Download (yt-dlp)", "type": "process", "row": 1 },
+    { "id": "extract", "label": "Audio Extraction (WAV)", "type": "process", "row": 1 },
+    { "id": "std", "label": "Standardization\n16 kHz • Mono", "type": "process", "row": 1 },
+    { "id": "clean", "label": "Manual Cleaning", "type": "process", "row": 2 },
+    { "id": "vad", "label": "Voice Activity Detection", "type": "process", "row": 2 },
+    { "id": "silence", "label": "Silence Removal", "type": "process", "row": 2 },
+    { "id": "norm", "label": "Loudness Normalization", "type": "process", "row": 3 },
+    { "id": "slice", "label": "7s Fixed Segmentation", "type": "process", "row": 3 },
+    { "id": "label", "label": "Dialect Labeling", "type": "process", "row": 3 },
+    { "id": "meta", "label": "Metadata Generation", "type": "data", "row": 4 },
+    { "id": "mel", "label": "Mel-Spectrograms\n128 Mel Bands", "type": "process", "row": 4 },
+    { "id": "final", "label": "ADC Dataset\nTrain / Val / Test", "type": "output", "row": 5 }
+  ],
+  "edges": [
+    { "id": "e1", "source": "src1", "target": "dl" },
+    { "id": "e2", "source": "src2", "target": "dl" },
+    { "id": "e3", "source": "dl", "target": "extract" },
+    { "id": "e4", "source": "extract", "target": "std" },
+    { "id": "e5", "source": "std", "target": "clean" },
+    { "id": "e6", "source": "clean", "target": "vad" },
+    { "id": "e7", "source": "vad", "target": "silence" },
+    { "id": "e8", "source": "silence", "target": "norm" },
+    { "id": "e9", "source": "norm", "target": "slice" },
+    { "id": "e10", "source": "slice", "target": "label" },
+    { "id": "e11", "source": "label", "target": "meta" },
+    { "id": "e12", "source": "meta", "target": "mel" },
+    { "id": "e13", "source": "mel", "target": "final" }
+  ]
+}

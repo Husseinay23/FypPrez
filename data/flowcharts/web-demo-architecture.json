@@ -1,0 +1,23 @@
+{
+  "nodes": [
+    { "id": "user", "label": "User Uploads Audio", "type": "input", "row": 0 },
+    { "id": "client", "label": "Client Validation", "type": "process", "row": 0 },
+    { "id": "api", "label": "FastAPI Endpoint", "type": "process", "row": 1 },
+    { "id": "canon", "label": "Canonical WAV Conversion", "type": "process", "row": 1 },
+    { "id": "pre", "label": "Training-Consistent\nPreprocessing", "type": "process", "row": 2 },
+    { "id": "mel", "label": "Mel-Spectrogram", "type": "process", "row": 2 },
+    { "id": "infer", "label": "CNN Model Inference", "type": "process", "row": 3 },
+    { "id": "resp", "label": "Dialect + Probabilities", "type": "process", "row": 3 },
+    { "id": "display", "label": "Frontend Visualization", "type": "output", "row": 4 }
+  ],
+  "edges": [
+    { "id": "e1", "source": "user", "target": "client" },
+    { "id": "e2", "source": "client", "target": "api" },
+    { "id": "e3", "source": "api", "target": "canon" },
+    { "id": "e4", "source": "canon", "target": "pre" },
+    { "id": "e5", "source": "pre", "target": "mel" },
+    { "id": "e6", "source": "mel", "target": "infer" },
+    { "id": "e7", "source": "infer", "target": "resp" },
+    { "id": "e8", "source": "resp", "target": "display" }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "nodes": [
+    { "id": "audio", "label": "Audio Input\n7s / 3s", "type": "input", "row": 0 },
+    { "id": "resample", "label": "Resampling\n16 kHz", "type": "process", "row": 1 },
+    { "id": "signal", "label": "Signal Normalization", "type": "process", "row": 1 },
+    { "id": "mel", "label": "Mel-Spectrogram", "type": "process", "row": 2 },
+    { "id": "log", "label": "Log Scaling", "type": "process", "row": 2 },
+    { "id": "specnorm", "label": "Spectrogram Normalization", "type": "process", "row": 2 },
+    { "id": "cnn", "label": "CNN Backbone", "type": "process", "row": 3 },
+    { "id": "pool", "label": "Global Pooling", "type": "process", "row": 3 },
+    { "id": "fc", "label": "Fully Connected Layer", "type": "process", "row": 4 },
+    { "id": "softmax", "label": "Softmax Output", "type": "process", "row": 4 },
+    { "id": "eval", "label": "7s / 3s / Five-Crop", "type": "output", "row": 5 }
+  ],
+  "edges": [
+    { "id": "e1", "source": "audio", "target": "resample" },
+    { "id": "e2", "source": "resample", "target": "signal" },
+    { "id": "e3", "source": "signal", "target": "mel" },
+    { "id": "e4", "source": "mel", "target": "log" },
+    { "id": "e5", "source": "log", "target": "specnorm" },
+    { "id": "e6", "source": "specnorm", "target": "cnn" },
+    { "id": "e7", "source": "cnn", "target": "pool" },
+    { "id": "e8", "source": "pool", "target": "fc" },
+    { "id": "e9", "source": "fc", "target": "softmax" },
+    { "id": "e10", "source": "softmax", "target": "eval" }
+  ]
+}

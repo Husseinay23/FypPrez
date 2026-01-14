@@ -1,0 +1,497 @@
+[
+  {
+    "id": "slide-01",
+    "order": 1,
+    "type": "title",
+    "section": "introduction",
+    "title": "Fine-Grained Arabic Dialect Identification Using Deep Learning",
+    "content": {
+      "paragraphs": [
+        "Final Year Project",
+        "Hussein Ayoub — Phoenicia University"
+      ]
+    }
+  },
+  {
+    "id": "slide-02",
+    "order": 2,
+    "type": "content",
+    "section": "introduction",
+    "title": "Problem & Motivation",
+    "content": {
+      "bulletPoints": [
+        "Arabic dialects vary significantly across regions in pronunciation, rhythm, and phonetics.",
+        "Most speech systems are trained on Modern Standard Arabic, which does not reflect real-world speech.",
+        "Dialect identification from short audio segments remains a challenging task."
+      ],
+      "highlight": "Accurate dialect detection is critical for speech recognition, forensics, and regional NLP systems."
+    }
+  },
+  {
+    "id": "slide-03",
+    "order": 3,
+    "type": "content",
+    "section": "introduction",
+    "title": "Literature Review",
+    "content": {
+      "bulletPoints": [
+        "Shon et al., 2017: ADI baseline systems; ~75% accuracy on early benchmark (MFCCs + classical ML).",
+        "Shon et al., 2018: CNN + language embeddings; ~73% single model, ~78% fusion approach.",
+        "Miao et al., 2019: CLSTM (Conv + LSTM/TDNN) improved over x-vectors for finer ADI granularity.",
+        "Lin et al., 2020: Transformer + CNN fusion; 86.29% on ADI-17 dataset.",
+        "Elleuch et al., 2025: Expanded label granularity and robustness/duration analysis.",
+        "Short-utterance evaluation importance: Poddar et al., 2017; Sahidullah et al., 2019; Chen et al., 2020; Hasan et al., 2013."
+      ],
+      "highlight": "Deep learning approaches show promise but struggle with short and noisy utterances."
+    }
+  },
+  {
+    "id": "slide-04",
+    "order": 4,
+    "type": "content",
+    "section": "dataset",
+    "title": "Dataset Overview (ADC)",
+    "content": {
+      "bulletPoints": [
+        "Arabic Dialect Forensic Corpus (ADC)",
+        "22,000 audio clips from 22 Arabic-speaking countries",
+        "Each clip standardized to 7 seconds",
+        "Collected from real-world public speech sources"
+      ],
+      "highlight": "ADC is designed for fine-grained, country-level dialect classification."
+    }
+  },
+  {
+    "id": "slide-05",
+    "order": 5,
+    "type": "flowchart",
+    "section": "dataset",
+    "title": "Dataset Creation Pipeline",
+    "flowchart": "dataset-pipeline"
+  },
+  {
+    "id": "slide-06",
+    "order": 6,
+    "type": "content",
+    "section": "dataset",
+    "title": "Temporal Evaluation Strategy",
+    "content": {
+      "bulletPoints": [
+        "7-second full utterance used as primary input.",
+        "3-second center crop simulates partial recordings.",
+        "5-crop strategy averages predictions from overlapping segments."
+      ],
+      "highlight": "Temporal robustness is essential for real-world dialect detection."
+    }
+  },
+  {
+    "id": "slide-07",
+    "order": 7,
+    "type": "flowchart",
+    "section": "models",
+    "title": "Model Pipeline",
+    "flowchart": "model-pipeline"
+  },
+  {
+    "id": "slide-08",
+    "order": 8,
+    "type": "content",
+    "section": "models",
+    "title": "CNN Architectures",
+    "content": {
+      "bulletPoints": [
+        "ResNet-18",
+        "ResNet-50",
+        "DenseNet-121",
+        "EfficientNet-B3",
+        "MobileNet-V2",
+        "SCNN (lightweight baseline)"
+      ],
+      "highlight": "Models vary in capacity, depth, and computational cost."
+    }
+  },
+  {
+    "id": "slide-09",
+    "order": 9,
+    "type": "content",
+    "section": "models",
+    "title": "Training Configuration",
+    "content": {
+      "bulletPoints": [
+        "Mel-spectrogram input (128 Mel bands)",
+        "Cross-entropy loss",
+        "Adam optimizer",
+        "Identical training setup for all models"
+      ],
+      "highlight": "Consistent training ensures fair comparison."
+    }
+  },
+  {
+    "id": "slide-10",
+    "order": 10,
+    "type": "results-summary",
+    "section": "results",
+    "title": "Results Summary",
+    "table": {
+      "headers": [
+        "Model",
+        "Accuracy (7s)",
+        "Macro-F1 (7s)",
+        "Accuracy (3s center)",
+        "Accuracy (3s 5-crop)",
+        "Params (M)"
+      ],
+      "rows": [
+        [
+          "ResNet-18",
+          "99.45%",
+          "0.995",
+          "97.21%",
+          "99.33%",
+          "11.18M"
+        ],
+        [
+          "DenseNet-121",
+          "99.15%",
+          "0.992",
+          "98.70%",
+          "99.12%",
+          "6.97M"
+        ],
+        [
+          "ResNet-50",
+          "99.55%",
+          "0.995",
+          "97.12%",
+          "99.55%",
+          "23.55M"
+        ],
+        [
+          "EfficientNet-B3",
+          "98.73%",
+          "0.987",
+          "98.09%",
+          "98.39%",
+          "10.73M"
+        ],
+        [
+          "MobileNet-V2",
+          "98.94%",
+          "0.989",
+          "98.36%",
+          "98.94%",
+          "2.25M"
+        ],
+        [
+          "SCNN",
+          "92.52%",
+          "0.925",
+          "79.15%",
+          "88.30%",
+          "0.42M"
+        ]
+      ],
+      "highlightRow": 0
+    },
+    "content": {
+      "highlight": "ResNet-18 provides the best accuracy–efficiency tradeoff."
+    }
+  },
+  {
+    "id": "slide-11",
+    "order": 11,
+    "type": "model-results",
+    "section": "results",
+    "title": "ResNet-18 Results",
+    "modelName": "resnet18",
+    "metrics": {
+      "Accuracy (7s)": "99.45%",
+      "Macro-F1 (7s)": "0.995",
+      "Accuracy (3s center)": "97.21%",
+      "Macro-F1 (3s center)": "0.972",
+      "Accuracy (3s 5-crop)": "99.33%",
+      "Macro-F1 (3s 5-crop)": "0.993",
+      "Params (M)": "11.18M"
+    },
+    "images": [
+      {
+        "src": "/images/resnet18_confusion.png",
+        "alt": "ResNet-18 confusion matrix",
+        "caption": "Confusion Matrix"
+      },
+      {
+        "src": "/images/resnet18_accuracy.png",
+        "alt": "ResNet-18 accuracy curves",
+        "caption": "Accuracy Curves"
+      },
+      {
+        "src": "/images/resnet18_loss.png",
+        "alt": "ResNet-18 loss curves",
+        "caption": "Loss Curves"
+      }
+    ],
+    "content": {
+      "highlight": "Residual blocks + moderate depth → best accuracy/efficiency tradeoff."
+    }
+  },
+  {
+    "id": "slide-12",
+    "order": 12,
+    "type": "model-results",
+    "section": "results",
+    "title": "DenseNet-121 Results",
+    "modelName": "densenet121",
+    "metrics": {
+      "Accuracy (7s)": "99.15%",
+      "Macro-F1 (7s)": "0.992",
+      "Accuracy (3s center)": "98.70%",
+      "Macro-F1 (3s center)": "0.987",
+      "Accuracy (3s 5-crop)": "99.12%",
+      "Macro-F1 (3s 5-crop)": "0.991",
+      "Params (M)": "6.97M"
+    },
+    "images": [
+      {
+        "src": "/images/densenet121_confusion.png",
+        "alt": "DenseNet-121 confusion matrix",
+        "caption": "Confusion Matrix"
+      },
+      {
+        "src": "/images/densenet121_accuracy.png",
+        "alt": "DenseNet-121 accuracy curves",
+        "caption": "Accuracy Curves"
+      },
+      {
+        "src": "/images/densenet121_loss.png",
+        "alt": "DenseNet-121 loss curves",
+        "caption": "Loss Curves"
+      }
+    ],
+    "content": {
+      "highlight": "Dense feature reuse → strong performance with efficient gradient flow."
+    }
+  },
+  {
+    "id": "slide-13",
+    "order": 13,
+    "type": "model-results",
+    "section": "results",
+    "title": "ResNet-50 Results",
+    "modelName": "resnet50",
+    "metrics": {
+      "Accuracy (7s)": "99.55%",
+      "Macro-F1 (7s)": "0.995",
+      "Accuracy (3s center)": "97.12%",
+      "Macro-F1 (3s center)": "0.971",
+      "Accuracy (3s 5-crop)": "99.55%",
+      "Macro-F1 (3s 5-crop)": "0.995",
+      "Params (M)": "23.55M"
+    },
+    "images": [
+      {
+        "src": "/images/resnet50_confusion.png",
+        "alt": "ResNet-50 confusion matrix",
+        "caption": "Confusion Matrix"
+      },
+      {
+        "src": "/images/resnet50_accuracy.png",
+        "alt": "ResNet-50 accuracy curves",
+        "caption": "Accuracy Curves"
+      },
+      {
+        "src": "/images/resnet50_loss.png",
+        "alt": "ResNet-50 loss curves",
+        "caption": "Loss Curves"
+      }
+    ],
+    "content": {
+      "highlight": "Deeper residual network → higher capacity but not always better generalization here."
+    }
+  },
+  {
+    "id": "slide-14",
+    "order": 14,
+    "type": "model-results",
+    "section": "results",
+    "title": "EfficientNet-B3 Results",
+    "modelName": "efficientnet_b3",
+    "metrics": {
+      "Accuracy (7s)": "98.73%",
+      "Macro-F1 (7s)": "0.987",
+      "Accuracy (3s center)": "98.09%",
+      "Macro-F1 (3s center)": "0.981",
+      "Accuracy (3s 5-crop)": "98.39%",
+      "Macro-F1 (3s 5-crop)": "0.984",
+      "Params (M)": "10.73M"
+    },
+    "images": [
+      {
+        "src": "/images/efficientnet_b3_confusion.png",
+        "alt": "EfficientNet-B3 confusion matrix",
+        "caption": "Confusion Matrix"
+      },
+      {
+        "src": "/images/efficientnet_b3_accuracy.png",
+        "alt": "EfficientNet-B3 accuracy curves",
+        "caption": "Accuracy Curves"
+      },
+      {
+        "src": "/images/efficientnet_b3_loss.png",
+        "alt": "EfficientNet-B3 loss curves",
+        "caption": "Loss Curves"
+      }
+    ],
+    "content": {
+      "highlight": "Compound scaling → competitive accuracy with balanced compute."
+    }
+  },
+  {
+    "id": "slide-15",
+    "order": 15,
+    "type": "model-results",
+    "section": "results",
+    "title": "MobileNet-V2 Results",
+    "modelName": "mobilenet_v2",
+    "metrics": {
+      "Accuracy (7s)": "98.94%",
+      "Macro-F1 (7s)": "0.989",
+      "Accuracy (3s center)": "98.36%",
+      "Macro-F1 (3s center)": "0.984",
+      "Accuracy (3s 5-crop)": "98.94%",
+      "Macro-F1 (3s 5-crop)": "0.989",
+      "Params (M)": "2.25M"
+    },
+    "images": [
+      {
+        "src": "/images/mobilenet_v2_confusion.png",
+        "alt": "MobileNet-V2 confusion matrix",
+        "caption": "Confusion Matrix"
+      },
+      {
+        "src": "/images/mobilenet_v2_accuracy.png",
+        "alt": "MobileNet-V2 accuracy curves",
+        "caption": "Accuracy Curves"
+      },
+      {
+        "src": "/images/mobilenet_v2_loss.png",
+        "alt": "MobileNet-V2 loss curves",
+        "caption": "Loss Curves"
+      }
+    ],
+    "content": {
+      "highlight": "Depthwise separable convs → lightweight, deployment-friendly baseline."
+    }
+  },
+  {
+    "id": "slide-16",
+    "order": 16,
+    "type": "model-results",
+    "section": "results",
+    "title": "SCNN Results",
+    "modelName": "scnn",
+    "metrics": {
+      "Accuracy (7s)": "92.52%",
+      "Macro-F1 (7s)": "0.925",
+      "Accuracy (3s center)": "79.15%",
+      "Macro-F1 (3s center)": "0.791",
+      "Accuracy (3s 5-crop)": "88.30%",
+      "Macro-F1 (3s 5-crop)": "0.883",
+      "Params (M)": "0.42M"
+    },
+    "images": [
+      {
+        "src": "/images/scnn_confusion.png",
+        "alt": "SCNN confusion matrix",
+        "caption": "Confusion Matrix"
+      },
+      {
+        "src": "/images/scnn_accuracy.png",
+        "alt": "SCNN accuracy curves",
+        "caption": "Accuracy Curves"
+      },
+      {
+        "src": "/images/scnn_loss.png",
+        "alt": "SCNN loss curves",
+        "caption": "Loss Curves"
+      }
+    ],
+    "content": {
+      "highlight": "Shallow spectral CNN → fastest but lower capacity for fine-grained dialects."
+    }
+  },
+  {
+    "id": "slide-17",
+    "order": 17,
+    "type": "flowchart",
+    "section": "results",
+    "title": "Web Demo Architecture",
+    "flowchart": "web-demo-architecture"
+  },
+  {
+    "id": "slide-18",
+    "order": 18,
+    "type": "content",
+    "section": "analysis",
+    "title": "Interpretation & Error Analysis",
+    "content": {
+      "bulletPoints": [
+        "Errors occur mainly between geographically close dialects.",
+        "Shorter utterances reduce available phonetic context.",
+        "Deeper models do not always outperform compact architectures."
+      ],
+      "highlight": "Model capacity alone does not guarantee better dialect discrimination."
+    }
+  },
+  {
+    "id": "slide-19",
+    "order": 19,
+    "type": "content",
+    "section": "analysis",
+    "title": "Arabic vs English & French",
+    "content": {
+      "bulletPoints": [
+        "Arabic dialects exhibit stronger phonetic variation.",
+        "English and French dialects are more standardized.",
+        "Arabic dialect identification is inherently more challenging."
+      ],
+      "highlight": "Arabic requires more robust and context-aware modeling."
+    }
+  },
+  {
+    "id": "slide-20",
+    "order": 20,
+    "type": "content",
+    "section": "analysis",
+    "title": "Limitations & Future Work",
+    "content": {
+      "bulletPoints": [
+        "Limited labeled Arabic speech data",
+        "Overlap between neighboring dialects",
+        "Background noise and recording quality"
+      ],
+      "highlight": "Future work includes larger datasets and self-supervised learning."
+    }
+  },
+  {
+    "id": "slide-21",
+    "order": 21,
+    "type": "content",
+    "section": "analysis",
+    "title": "References",
+    "content": {
+      "bulletPoints": [
+        "Shon et al., 2017. Arabic Dialect Identification in the Wild.",
+        "Shon et al., 2018. Convolutional Neural Networks and Language Embeddings for End-to-End Dialect Recognition.",
+        "Miao et al., 2019. CLSTM: Deep Feature-Based Speech Emotion Recognition Using the Hierarchical ConvLSTM Network.",
+        "Lin et al., 2020. Transformer-Based Fusion of CNN Features for Arabic Dialect Identification.",
+        "Poddar et al., 2017. Short Utterance-Based Speech Language Identification in Indian Languages.",
+        "Sahidullah et al., 2019. On the Use of Spectral Features for Speaker Verification.",
+        "Chen et al., 2020. Short-Duration Speaker Verification (SdSV) Challenge 2020.",
+        "Hasan et al., 2013. Duration Robust Modeling for Speaker Verification with Short Utterances.",
+        "OSAC/NIST, 2024. Forensic Speech Analysis Standards.",
+        "NIST, 2024. Speaker Recognition Evaluation Protocols.",
+        "Greenberg et al., 2025. Arabic Dialect Corpora and Benchmarks (if applicable)."
+      ]
+    }
+  }
+]
