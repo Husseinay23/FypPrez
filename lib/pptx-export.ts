@@ -358,7 +358,7 @@ export async function exportToPPTX(
       case "table":
       case "results-summary":
         if (slide.table) {
-          const tableData = [
+          const tableData: any = [
             slide.table.headers,
             ...slide.table.rows.map((row) => row.map((cell) => String(cell))),
           ];
