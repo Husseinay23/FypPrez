@@ -1,4 +1,4 @@
-import PptxGenJS from "pptxgenjs";
+import PptxGenJS, { SHAPE_NAME } from "pptxgenjs";
 import { Slide } from "@/types/slide";
 import { FlowchartData } from "@/types/flowchart";
 import { computeDagreLayout, getLayoutDimensions } from "@/lib/flowchart-layout";
@@ -37,15 +37,15 @@ function flowchartNodeToPPTX(
 }
 
 // Node shape mapping for PPTX
-function getNodeShape(nodeType: string): string {
+function getNodeShape(nodeType: string): SHAPE_NAME {
   switch (nodeType) {
     case "input":
     case "output":
-      return "roundRect";
+      return "roundRect" as SHAPE_NAME;
     case "decision":
-      return "diamond";
+      return "diamond" as SHAPE_NAME;
     default:
-      return "rect";
+      return "rect" as SHAPE_NAME;
   }
 }
 
@@ -137,7 +137,7 @@ export async function exportToPPTX(
     pptxSlide.background = { color: bgColor };
 
     // Add accent bar at top (like web version)
-    pptxSlide.addShape("rect" as any, {
+    pptxSlide.addShape("rect" as SHAPE_NAME, {
       x: 0,
       y: 0,
       w: SLIDE_WIDTH,
@@ -293,7 +293,7 @@ export async function exportToPPTX(
         }
 
         if (slide.content?.highlight) {
-          pptxSlide.addShape("rect" as any, {
+          pptxSlide.addShape("rect" as SHAPE_NAME, {
             x: 0.5,
             y: 4.5,
             w: 9,
@@ -473,7 +473,7 @@ export async function exportToPPTX(
             const ty = targetPos.y / 914400;
 
             // Add connector line (use section accent color)
-            pptxSlide.addShape("line" as any, {
+            pptxSlide.addShape("line" as SHAPE_NAME, {
               x: sx + 0.6,
               y: sy + 0.3,
               w: tx - sx,
